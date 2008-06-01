@@ -2,6 +2,7 @@ require 'rubygems'
 require 'dnssd'
 require 'set'
 require 'gitjour/version'
+require 'gitjour/system_caller'
  
 Thread.abort_on_exception = true
  
@@ -48,14 +49,14 @@ module Gitjour
  
         service = locate_repo repository_name
         puts "Connecting to #{service.host}:#{service.port}"
- 
-        system "git clone git://#{service.host}:#{service.port}/ #{dir}/"
+
+        SystemCaller.clone(service.host, service.port, dir)
       end
  
       def remote(repository_name, *rest)
         dir = rest.shift || repository_name
         service = locate_repo repository_name
-        system "git remote add #{dir} git://#{service.host}:#{service.port}/"
+				SystemCaller.remote(dir, service.host, service.port)
       end
  
       def serve(path=Dir.pwd, *rest)
@@ -74,7 +75,7 @@ module Gitjour
           end
         end
  
-        `git-daemon --verbose --export-all --port=#{port} --base-path=#{path} --base-path-relaxed`
+        SystemCaller.start_git_daemon(port.to_i, path)
       end
  
       def help

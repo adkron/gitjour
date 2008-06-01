@@ -8,6 +8,7 @@ config/hoe.rb
 config/requirements.rb
 lib/gitjour.rb
 lib/gitjour/application.rb
+lib/gitjour/system_caller.rb
 lib/gitjour/version.rb
 script/destroy
 script/generate
